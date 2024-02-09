@@ -5,6 +5,7 @@ def setup
   @string_shots = 40
   @sleep_turns = 0
   @history = []
+  @turns = 0
 end
 
 def weedle_turn
@@ -62,16 +63,22 @@ end
 
 wins = 0
 losses = 0
+turns = 0
 
-1_000_000.times do
+simulations = 1_000_000
+simulations.times do
   setup
   while @weedle > 0 && @weezing > 0
     weezing_turn
     weedle_turn
+    @turns += @weezing > 0 ? 2 : 1
   end
 
   losses += 1 if @weezing <= 0
   wins += 1 if @weedle <= 0
+  turns += @turns
 end
 
 puts "Wins #{wins} / Losses #{losses}"
+puts "Average turns: #{turns / simulations.to_f}"
+puts "Time taken to escape: #{turns / wins.to_f * 10 / 3600 / 24} days"
